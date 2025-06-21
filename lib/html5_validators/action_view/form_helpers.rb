@@ -12,7 +12,16 @@ module Html5Validators
         super
       end
 
-      if Rails::VERSION::STRING >= '5.1'
+      if Rails::VERSION::STRING >= '7.2'
+        def form_with(model: false, scope: nil, url: nil, format: nil, **options)
+          if model && model.respond_to?(:auto_html5_validation=)
+            if !Html5Validators.enabled || (options[:auto_html5_validation] == false)
+              model.auto_html5_validation = false
+            end
+          end
+          super
+        end
+      elsif Rails::VERSION::STRING >= '5.1'
         def form_with(model: nil, scope: nil, url: nil, format: nil, **options)
           if model && model.respond_to?(:auto_html5_validation=)
             if !Html5Validators.enabled || (options[:auto_html5_validation] == false)

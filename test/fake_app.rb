@@ -32,6 +32,10 @@ Rails.application.routes.draw do
       get :new_with_required_false
     end
   end
+
+  if Rails::VERSION::STRING >= '5.1'
+    resources :search, only: [:index]
+  end
 end
 
 # models
@@ -209,6 +213,15 @@ class ItemsController < ApplicationController
 <%= form_with model: @item, id: 'form_with' do |f| %>
 <%= f.text_field :name, required: false, id: 'item_name' %>
 <% end %>
+<% end %>
+    ERB
+  end
+end
+class SearchController < ApplicationController
+  def index
+    render inline: <<-ERB
+<%= form_with url: '/search', id: 'form_with' do |f| %>
+<%= f.search_field :query, id: 'query' %>
 <% end %>
     ERB
   end
